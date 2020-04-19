@@ -1,6 +1,6 @@
 package com.curiositty.login
 
-import com.curiositty.GAuthLogin
+import com.curiositty.AuthLogin
 import com.curiositty.events.PirateJoinEvent
 import com.curiositty.login.utils.GameProfileBuilder
 import com.curiositty.reflection.Reflection
@@ -19,7 +19,7 @@ class Login {
     private val gameProfile = Reflection.getField("{nms}.PacketLoginInStart", GameProfile::class.java, 0)
 
     fun enable() {
-        object : TinyProtocol(GAuthLogin.INSTANCE) {
+        object : TinyProtocol(AuthLogin.INSTANCE) {
             override fun onPacketInAsync(sender: Player?, channel: Channel, packet: Any): Any? {
                 if (packet is PacketLoginInStart) {
                     if (gameProfile.hasField(packet)) {
@@ -84,9 +84,6 @@ class Login {
             } catch (e1: Exception) {
                 throw Error(e1.message)
             }
-        }
-
-        override fun a(packetlogininencryptionbegin: PacketLoginInEncryptionBegin?) {
         }
 
         override fun b() {

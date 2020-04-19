@@ -1,6 +1,6 @@
 package com.curiositty.mysql
 
-import com.curiositty.GAuthLogin
+import com.curiositty.AuthLogin
 import com.curiositty.utils.Values
 import java.io.File
 import java.sql.Connection
@@ -9,7 +9,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource
 
 class MySqlConnector {
 
-    private val instance = GAuthLogin.INSTANCE
+    private val instance = AuthLogin.INSTANCE
 
     companion object {
         lateinit var connection: Connection
@@ -42,7 +42,7 @@ class MySqlConnector {
     }
 
     private fun liteConnection() {
-        val file = File(instance.dataFolder, "GAuthLogin.db")
+        val file = File(instance.dataFolder, "AuthLogin.db")
         if(!file.exists())
             file.createNewFile()
 

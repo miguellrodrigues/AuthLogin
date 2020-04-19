@@ -1,6 +1,6 @@
 package com.curiositty.listener
 
-import com.curiositty.GAuthLogin
+import com.curiositty.AuthLogin
 import com.curiositty.events.PirateJoinEvent
 import com.curiositty.utils.Strings
 import org.bukkit.Bukkit
@@ -15,9 +15,9 @@ import java.lang.NumberFormatException
 
 class PlayerEvents : Listener {
 
-    private val loginData = GAuthLogin.loginData
-    private val loginManager = GAuthLogin.loginManager
-    private val iconManager = GAuthLogin.iconManager
+    private val loginData = AuthLogin.loginData
+    private val loginManager = AuthLogin.loginManager
+    private val iconManager = AuthLogin.iconManager
 
     @EventHandler
     fun onPiratePlayerJoin(event: PirateJoinEvent) {
@@ -41,12 +41,12 @@ class PlayerEvents : Listener {
             if(!loginData.registered(player.uniqueId))
                 player.sendMessage("${Strings.AUTH} §fCaso queira adicionar seu código pelo QR Code, baste deslogar e adicionar pelo motd, ou digite §f[§ecode§f]")
 
-            player.sendMessage("${Strings.AUTH} §fInforme o código do Goole Auth!")
+            player.sendMessage("${Strings.AUTH} §fInforme o código do seu Autenticador!")
 
             return
         }
 
-        iconManager.putPlayerName(player.address.hostName, player.name)
+        iconManager.putPlayerName(player.name, player.address.hostName)
     }
 
     @EventHandler
@@ -88,7 +88,7 @@ class PlayerEvents : Listener {
                         player.sendMessage("${Strings.PREFIX} §fAutenticado com sucesso!")
                         loginManager.unlockPlayer(player)
                     }
-                }.runTaskLaterAsynchronously(GAuthLogin.INSTANCE, 10L)
+                }.runTaskLaterAsynchronously(AuthLogin.INSTANCE, 10L)
             } else {
                 player.sendMessage("${Strings.AUTH} §fFalha ao se autenticar, tente novamente")
             }

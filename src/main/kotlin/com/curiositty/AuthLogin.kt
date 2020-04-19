@@ -12,10 +12,10 @@ import com.curiositty.utils.Values
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 
-class GAuthLogin : JavaPlugin() {
+class AuthLogin : JavaPlugin() {
 
     companion object {
-        lateinit var INSTANCE: GAuthLogin
+        lateinit var INSTANCE: AuthLogin
         lateinit var mysqlConnector: MySqlConnector
         lateinit var mySqlManager: MySqlManager
         lateinit var loginData: LoginData

@@ -1,6 +1,6 @@
 package com.curiositty.mysql.data
 
-import com.curiositty.GAuthLogin
+import com.curiositty.AuthLogin
 import com.warrenstrange.googleauth.GoogleAuthenticator
 import java.util.*
 import kotlin.collections.HashMap
@@ -8,7 +8,7 @@ import kotlin.collections.HashMap
 class LoginData {
 
     companion object {
-        private val mySqlManager = GAuthLogin.mySqlManager
+        private val mySqlManager = AuthLogin.mySqlManager
         private val storedDataMap: HashMap<UUID, Data> = HashMap()
         private val gameDataMap: HashMap<UUID, Data> = HashMap()
     }

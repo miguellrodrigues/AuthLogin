@@ -1,4 +1,4 @@
-name: GAuthLogin
+name: AuthLogin
 version: 1.0-SNAPSHOT
 author: Miguel
-main: com.curiositty.GAuthLogin
+main: com.curiositty.AuthLogin

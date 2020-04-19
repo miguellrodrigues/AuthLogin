@@ -1,6 +1,6 @@
 package com.curiositty.listener
 
-import com.curiositty.GAuthLogin
+import com.curiositty.AuthLogin
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -9,7 +9,7 @@ import org.bukkit.event.server.ServerListPingEvent
 class ServerEvents : Listener {
 
     companion object {
-        private val iconManager = GAuthLogin.iconManager
+        private val iconManager = AuthLogin.iconManager
     }
 
     @EventHandler

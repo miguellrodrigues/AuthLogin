@@ -1,6 +1,6 @@
 package com.curiositty.manager
 
-import com.curiositty.GAuthLogin
+import com.curiositty.AuthLogin
 import com.warrenstrange.googleauth.GoogleAuthenticator
 import org.bukkit.entity.Player
 import java.util.*
@@ -13,7 +13,7 @@ class LoginManager {
         val lockedPlayers: MutableList<UUID> = ArrayList()
         val piratePlayers: MutableList<UUID> = ArrayList()
 
-        val loginData = GAuthLogin.loginData
+        val loginData = AuthLogin.loginData
 
         val qrCode: HashMap<String, String> = HashMap()
 

@@ -5,7 +5,7 @@ import java.util.*
 
 class MySqlManager {
 
-    private val table = "gauthlogin_players"
+    private val table = "authlogin_players"
     private val connection = MySqlConnector.connection
 
     init {
