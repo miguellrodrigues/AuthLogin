@@ -1,6 +1,7 @@
 package com.curiositty.mysql
 
 import com.curiositty.GAuthLogin
+import com.curiositty.utils.Values
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource
 import java.io.File
 import java.sql.Connection
@@ -18,18 +19,18 @@ class MySqlConnector {
         connection = con
     }
 
-    fun remoteConnection(host: String?, database: String?, username: String?, password: String?, port: Int) {
+    fun remoteConnection() {
         println("Conectando ao servidor mysql remoto...")
 
         try {
             Class.forName("com.mysql.jdbc.Driver")
 
             val dataSource = MysqlDataSource()
-            dataSource.serverName = host
-            dataSource.port = port
-            dataSource.databaseName = database
-            dataSource.user = username
-            dataSource.setPassword(password)
+            dataSource.serverName = Values.MYSQL_HOST
+            dataSource.port = Values.MYSQL_PORT
+            dataSource.databaseName = Values.MYSQL_SCHEMA
+            dataSource.user = Values.MYSQL_USER
+            dataSource.setPassword(Values.MYSQL_PASSWORD)
             dataSource.serverTimezone = "UTC"
 
             setConnection(dataSource.connection)

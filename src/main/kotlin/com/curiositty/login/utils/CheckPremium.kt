@@ -39,7 +39,7 @@ class CheckPremium(nick: String?) {
         out.close()
         val `in` = BufferedReader(InputStreamReader(con.inputStream))
         var output: String? = ""
-        var line: String? = null
+        var line: String?
         while (`in`.readLine().also { line = it } != null) output += line
         `in`.close()
         return output
