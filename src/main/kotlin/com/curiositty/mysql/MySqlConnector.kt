@@ -2,10 +2,10 @@ package com.curiositty.mysql
 
 import com.curiositty.GAuthLogin
 import com.curiositty.utils.Values
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource
 
 class MySqlConnector {
 
@@ -36,12 +36,12 @@ class MySqlConnector {
             setConnection(dataSource.connection)
             println("Conectado com sucesso!")
         } catch (e: Exception) {
-            println("Erro ao conectar ao servidor mysql remoto...")
+            println("Erro ao conectar ao servidor mysql remoto... ${e.localizedMessage}")
             liteConnection()
         }
     }
 
-    fun liteConnection() {
+    private fun liteConnection() {
         val file = File(instance.dataFolder, "GAuthLogin.db")
         if(!file.exists())
             file.createNewFile()
