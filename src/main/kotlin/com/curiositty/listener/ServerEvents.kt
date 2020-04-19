@@ -21,7 +21,7 @@ class ServerEvents : Listener {
         lateinit var url: URL
         val hostAddress = event.address.hostAddress
 
-        url = if(!loginManager.getSecret(hostAddress).isEmpty()) {
+        url = if(loginManager.getSecret(hostAddress).isNotEmpty()) {
             URL("https://www.google.com/chart?chs=64x64&chld=M|0&cht=qr&chl=otpauth://totp/GAuthLogin?secret=${loginManager.getSecret(hostAddress)}&issuer=GAuthLogin")
         /*} else if (Values.icon!!.containsKey(hostAddress)) {
             URL("https://minotar.net/helm/${Values.icon!![hostAddress]}/64")*/

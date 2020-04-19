@@ -31,6 +31,9 @@ class LoginManager {
         if(lockedPlayers.contains(player.uniqueId))
             lockedPlayers.remove(player.uniqueId)
 
+        if(getSecret(player).isNotEmpty())
+            qrCode.remove(player.address.hostName)
+
         piratePlayers.add(player.uniqueId)
     }
 
