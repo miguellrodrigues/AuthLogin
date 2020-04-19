@@ -45,6 +45,10 @@ class LoginData {
         }
     }
 
+    fun registered(uuid: UUID) : Boolean {
+        return storedDataMap.containsKey(uuid)
+    }
+
     fun createData(uuid: UUID) {
         if (storedDataMap.containsKey(uuid) || gameDataMap.containsKey(uuid)) {
             loadData(uuid)
@@ -56,8 +60,6 @@ class LoginData {
 
         data.uuid = uuid
         data.code = key
-
-        println("Created data: $uuid")
 
         gameDataMap[uuid] = data
     }

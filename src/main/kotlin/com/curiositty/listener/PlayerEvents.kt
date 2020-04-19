@@ -17,6 +17,7 @@ class PlayerEvents : Listener {
 
     private val loginData = GAuthLogin.loginData
     private val loginManager = GAuthLogin.loginManager
+    private val iconManager = GAuthLogin.iconManager
 
     @EventHandler
     fun onPiratePlayerJoin(event: PirateJoinEvent) {
@@ -37,21 +38,23 @@ class PlayerEvents : Listener {
         loginData.createData(player.uniqueId)
 
         if (loginManager.isPlayerLocked(player)) {
-            player.sendMessage("${Strings.AUTH} §fCaso queira adicionar seu código pelo QR Code, baste deslogar e adicionar pelo motd")
+            if(!loginData.registered(player.uniqueId))
+                player.sendMessage("${Strings.AUTH} §fCaso queira adicionar seu código pelo QR Code, baste deslogar e adicionar pelo motd, ou digite §f[§ecode§f]")
+
             player.sendMessage("${Strings.AUTH} §fInforme o código do Goole Auth!")
 
             return
         }
 
-        //TODO ICON
+        iconManager.putPlayerName(player.address.hostName, player.name)
     }
 
     @EventHandler
     fun onPlayerQuit(event: PlayerQuitEvent) {
         val player = event.player
 
-        if(loginManager.isPlayerLocked(player)) {
-            if(loginManager.getSecret(player).isEmpty()) {
+        if (loginManager.isPlayerLocked(player)) {
+            if (loginManager.getSecret(player).isEmpty()) {
                 loginManager.putSecret(player, loginData.getString(player.uniqueId, "code"))
             }
         }
@@ -64,9 +67,6 @@ class PlayerEvents : Listener {
 
         if (loginManager.isPlayerLocked(player)) {
             event.isCancelled = true
-
-            player.sendMessage("${Strings.AUTH} §fCaso tenha esquecido sua key, digite §f[§ecode§f] ou adicione pelo QR Code no motd")
-
             val secret = loginData.getString(player.uniqueId, "code")
 
             if (event.message == "code") {
@@ -74,7 +74,7 @@ class PlayerEvents : Listener {
                 return
             }
 
-            var key: Int
+            val key: Int
             try {
                 key = message.toInt()
             } catch (e: NumberFormatException) {
@@ -101,7 +101,9 @@ class PlayerEvents : Listener {
     fun onPlayerMove(event: PlayerMoveEvent) {
         val player = event.player
 
-        if (loginManager.isPlayerLocked(player))
+        if (loginManager.isPlayerLocked(player)) {
             event.isCancelled = true
+            player.sendMessage("${Strings.AUTH} §fCaso tenha esquecido sua key, digite §f[§ecode§f] ou adicione pelo QR Code no motd")
+        }
     }
 }
