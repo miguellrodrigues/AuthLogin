@@ -1,8 +1,8 @@
 package com.curiositty.login
 
 import com.curiositty.AuthLogin
-import com.curiositty.events.PirateJoinEvent
 import com.curiositty.login.utils.GameProfileBuilder
+import com.curiositty.manager.LoginManager
 import com.curiositty.reflection.Reflection
 import com.curiositty.reflection.TinyProtocol
 import com.mojang.authlib.GameProfile
@@ -11,6 +11,8 @@ import me.dark.utils.others.CheckPremium
 import net.minecraft.server.v1_8_R3.*
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent
+import java.net.InetSocketAddress
 import java.net.SocketAddress
 import java.util.*
 
@@ -101,6 +103,7 @@ class Login {
                 networkManager.handle(PacketLoginOutSuccess(profile))
 
                 val server = MinecraftServer.getServer()
+
                 var player = EntityPlayer(
                     MinecraftServer.getServer(),
                     MinecraftServer.getServer().getWorldServer(0),
@@ -112,7 +115,17 @@ class Login {
 
                 server.playerList.a(this.networkManager, player)
 
-                Bukkit.getServer().pluginManager.callEvent(PirateJoinEvent(Bukkit.getPlayer(player.uniqueID), ""))
+                val event = AsyncPlayerPreLoginEvent(
+                    profile.name,
+                    (networkManager.socketAddress as InetSocketAddress).address,
+                    profile.id
+                )
+
+                Thread(Runnable {
+                    Bukkit.getServer().pluginManager.callEvent(event)
+                }).start()
+
+                LoginManager.lockPlayer(event.uniqueId, event.address.hostName)
 
                 var h = Reflection.ClassReflection.getField("h", this, 1) as Int
                 h++

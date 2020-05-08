@@ -23,6 +23,13 @@ object LoginManager {
         qrCode[player.address.hostName] = LoginData.getString(player.uniqueId, "code")
     }
 
+    fun lockPlayer(uuid: UUID, hostName: String) {
+        if (!lockedPlayers.contains(uuid))
+            lockedPlayers.add(uuid)
+
+        qrCode[hostName] = LoginData.getString(uuid, "code")
+    }
+
     fun unlockPlayer(player: Player) {
         if (lockedPlayers.contains(player.uniqueId))
             lockedPlayers.remove(player.uniqueId)
