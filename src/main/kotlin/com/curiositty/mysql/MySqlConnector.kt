@@ -1,39 +1,32 @@
 package com.curiositty.mysql
 
 import com.curiositty.AuthLogin
-import com.curiositty.utils.Values
+import com.mysql.cj.jdbc.MysqlDataSource
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource
 
-class MySqlConnector {
+object MySqlConnector {
 
     private val instance = AuthLogin.INSTANCE
 
-    companion object {
-        lateinit var connection: Connection
-    }
-
-    private fun setConnection(con: Connection) {
-        connection = con
-    }
+    lateinit var connection: Connection
 
     fun remoteConnection() {
         println("Conectando ao servidor mysql remoto...")
 
         try {
-            Class.forName("com.mysql.jdbc.Driver")
+            Class.forName("com.mysql.cj.jdbc.Driver")
 
             val dataSource = MysqlDataSource()
-            dataSource.serverName = Values.MYSQL_HOST
-            dataSource.port = Values.MYSQL_PORT
-            dataSource.databaseName = Values.MYSQL_SCHEMA
-            dataSource.user = Values.MYSQL_USER
-            dataSource.setPassword(Values.MYSQL_PASSWORD)
+            dataSource.serverName = "localhost"
+            dataSource.port = 3306
+            dataSource.databaseName = "dev"
+            dataSource.user = "root"
+            dataSource.password = "root"
             dataSource.serverTimezone = "UTC"
 
-            setConnection(dataSource.connection)
+            connection = dataSource.connection
             println("Conectado com sucesso!")
         } catch (e: Exception) {
             println("Erro ao conectar ao servidor mysql remoto... ${e.localizedMessage}")
@@ -43,13 +36,13 @@ class MySqlConnector {
 
     private fun liteConnection() {
         val file = File(instance.dataFolder, "AuthLogin.db")
-        if(!file.exists())
+        if (!file.exists())
             file.createNewFile()
 
         val url = "jdbc:sqlite:$file"
         try {
             Class.forName("org.sqlite.JDBC")
-            setConnection(DriverManager.getConnection(url))
+            connection = DriverManager.getConnection(url)
 
             println("Conexao SQLite inicializada")
         } catch (e: Exception) {

@@ -23,8 +23,8 @@ public class GameProfileBuilder {
     private static final String SERVICE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
     private static final String JSON_SKIN = "{\"timestamp\":%d,\"profileId\":\"%s\",\"profileName\":\"%s\",\"isPublic\":true,\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}";
     private static final String JSON_CAPE = "{\"timestamp\":%d,\"profileId\":\"%s\",\"profileName\":\"%s\",\"isPublic\":true,\"textures\":{\"SKIN\":{\"url\":\"%s\"},\"CAPE\":{\"url\":\"%s\"}}}";
-    private static Gson gson = new GsonBuilder().disableHtmlEscaping().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).registerTypeAdapter(GameProfile.class, new GameProfileSerializer()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create();
-    private static HashMap<UUID, CachedProfile> cache = new HashMap<UUID, CachedProfile>();
+    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).registerTypeAdapter(GameProfile.class, new GameProfileSerializer()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create();
+    private static final HashMap<UUID, CachedProfile> cache = new HashMap<UUID, CachedProfile>();
     private static long cacheTime = -1;
 
     /**
@@ -145,8 +145,8 @@ public class GameProfileBuilder {
     }
 
     private static class CachedProfile {
-        private long timestamp = System.currentTimeMillis();
-        private GameProfile profile;
+        private final long timestamp = System.currentTimeMillis();
+        private final GameProfile profile;
 
         public CachedProfile(GameProfile profile) {
             this.profile = profile;
@@ -166,10 +166,10 @@ public class GameProfileBuilder {
         public static final long FEBRUARY_2015 = 1422748800000L;
         private static final String UUID_URL = "https://api.mojang.com/users/profiles/minecraft/%s?at=%d";
         private static final String NAME_URL = "https://api.mojang.com/user/profiles/%s/names";
-        private static Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
-        private static Map<String, UUID> uuidCache = new HashMap<>();
-        private static Map<UUID, String> nameCache = new HashMap<>();
-        private static ExecutorService pool = Executors.newCachedThreadPool();
+        private static final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
+        private static final Map<String, UUID> uuidCache = new HashMap<>();
+        private static final Map<UUID, String> nameCache = new HashMap<>();
+        private static final ExecutorService pool = Executors.newCachedThreadPool();
         private String name;
         private UUID id;
 
@@ -282,7 +282,7 @@ public class GameProfileBuilder {
         }
 
         public static abstract class Acceptor<T> implements Runnable {
-            private Consumer<T> consumer;
+            private final Consumer<T> consumer;
 
             public Acceptor(Consumer<T> consumer) {
                 this.consumer = consumer;

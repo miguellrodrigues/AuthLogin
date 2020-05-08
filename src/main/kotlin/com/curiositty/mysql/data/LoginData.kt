@@ -1,33 +1,30 @@
 package com.curiositty.mysql.data
 
-import com.curiositty.AuthLogin
+import com.curiositty.manager.MySqlManager
 import com.warrenstrange.googleauth.GoogleAuthenticator
 import java.util.*
 import kotlin.collections.HashMap
 
-class LoginData {
+object LoginData {
 
-    companion object {
-        private val mySqlManager = AuthLogin.mySqlManager
-        private val storedDataMap: HashMap<UUID, Data> = HashMap()
-        private val gameDataMap: HashMap<UUID, Data> = HashMap()
-    }
+    private val storedDataMap: HashMap<UUID, Data> = HashMap()
+    private val gameDataMap: HashMap<UUID, Data> = HashMap()
 
     fun loadAllData() {
-        val allPlayers = mySqlManager.getAllPlayers()
+        val allPlayers = MySqlManager.getAllPlayers()
 
         allPlayers.forEach { uuid ->
             val data = Data()
 
             data.uuid = uuid
-            data.code = mySqlManager.getString(uuid, "code")
+            data.code = MySqlManager.getString(uuid, "code")
 
             storedDataMap[uuid] = data
         }
     }
 
     private fun loadData(uuid: UUID) {
-        if(gameDataMap.containsKey(uuid))
+        if (gameDataMap.containsKey(uuid))
             return
 
         val data = Data()
@@ -45,7 +42,7 @@ class LoginData {
         }
     }
 
-    fun registered(uuid: UUID) : Boolean {
+    fun registered(uuid: UUID): Boolean {
         return storedDataMap.containsKey(uuid)
     }
 
@@ -106,11 +103,11 @@ class LoginData {
         lateinit var code: String
 
         fun save() {
-            if (mySqlManager.playerExist(uuid))
+            if (MySqlManager.playerExist(uuid))
                 return
 
-            mySqlManager.createPlayer(uuid)
-            mySqlManager.setString(uuid, "code", code)
+            MySqlManager.createPlayer(uuid)
+            MySqlManager.setString(uuid, "code", code)
         }
     }
 }

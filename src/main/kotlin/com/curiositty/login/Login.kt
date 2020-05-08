@@ -8,7 +8,7 @@ import com.curiositty.reflection.TinyProtocol
 import com.mojang.authlib.GameProfile
 import io.netty.channel.Channel
 import me.dark.utils.others.CheckPremium
-import net.minecraft.server.v1_9_R2.*
+import net.minecraft.server.v1_8_R3.*
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.net.SocketAddress
@@ -32,7 +32,10 @@ class Login {
                             profile = GameProfile(GameProfileBuilder.UUIDFetcher.getUUID(profile.name), profile.name)
 
                             if (!loginCheck(profile.name, profile.id)) {
-                                disconnect("Ocorreu um erro, por favor, tente novamente.", networkList(channel.localAddress()))
+                                disconnect(
+                                    "Ocorreu um erro, por favor, tente novamente.",
+                                    networkList(channel.localAddress())
+                                )
                             }
                         }
                     }
@@ -46,7 +49,7 @@ class Login {
     private fun disconnect(message: String, manager: NetworkManager) {
         try {
             val exception = ChatComponentText(message)
-            manager.handleDisconnection()
+            manager.handle(PacketLoginOutDisconnect(exception))
             manager.close(exception)
         } catch (e: Exception) {
             throw Error(e.message)
@@ -61,7 +64,7 @@ class Login {
         lateinit var nm: NetworkManager
 
         try {
-            for (next in Reflection.ClassReflection.getField("h", MinecraftServer.getServer().am(), 0) as List<*>) {
+            for (next in Reflection.ClassReflection.getField("h", MinecraftServer.getServer().aq(), 0) as List<*>) {
                 if ((next as NetworkManager).socketAddress == socketAddress) {
                     nm = next
                     break
@@ -95,10 +98,15 @@ class Login {
                 var profile = Reflection.ClassReflection.getField("i", this, 1) as GameProfile
                 profile = a(profile)
 
-                networkManager.sendPacket(PacketLoginOutSuccess(profile))
+                networkManager.handle(PacketLoginOutSuccess(profile))
 
                 val server = MinecraftServer.getServer()
-                var player = EntityPlayer(MinecraftServer.getServer(), MinecraftServer.getServer().getWorldServer(0), profile, PlayerInteractManager(MinecraftServer.getServer().getWorldServer(0)))
+                var player = EntityPlayer(
+                    MinecraftServer.getServer(),
+                    MinecraftServer.getServer().getWorldServer(0),
+                    profile,
+                    PlayerInteractManager(MinecraftServer.getServer().getWorldServer(0))
+                )
 
                 player = server.playerList.processLogin(player.profile, player)
 

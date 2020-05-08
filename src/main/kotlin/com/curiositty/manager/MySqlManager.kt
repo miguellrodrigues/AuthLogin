@@ -3,7 +3,7 @@ package com.curiositty.manager
 import com.curiositty.mysql.MySqlConnector
 import java.util.*
 
-class MySqlManager {
+object MySqlManager {
 
     private val table = "authlogin_players"
     private val connection = MySqlConnector.connection
@@ -50,40 +50,43 @@ class MySqlManager {
     }
 
     fun createPlayer(uuid: UUID) {
-        if(playerExist(uuid))
+        if (playerExist(uuid))
             return
 
-        try{
+        try {
             val statement = connection.prepareStatement(
-                "INSERT INTO $table(uuid, code) VALUES ('$uuid', '')")
+                "INSERT INTO $table(uuid, code) VALUES ('$uuid', '')"
+            )
 
             statement.execute()
             statement.close()
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             throw Error(e.message)
         }
     }
 
     fun setString(uuid: UUID, column: String, value: String) {
-        try{
+        try {
             val statement = connection.prepareStatement(
-                "UPDATE $table SET $column = '$value' WHERE uuid='${uuid}'")
+                "UPDATE $table SET $column = '$value' WHERE uuid='${uuid}'"
+            )
 
             statement.executeUpdate()
             statement.close()
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             throw Error(e.message)
         }
     }
 
-    fun getString(uuid: UUID, column: String) : String {
+    fun getString(uuid: UUID, column: String): String {
         lateinit var str: String
 
-        try{
+        try {
             val statement = connection.prepareStatement(
-                "SELECT * FROM $table WHERE uuid=?")
+                "SELECT * FROM $table WHERE uuid=?"
+            )
 
             statement.setString(1, uuid.toString())
 
@@ -95,7 +98,7 @@ class MySqlManager {
             statement.close()
             resultSet.close()
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             throw Error(e.message)
         }
 

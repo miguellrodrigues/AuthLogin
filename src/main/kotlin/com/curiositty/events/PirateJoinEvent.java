@@ -14,6 +14,10 @@ public class PirateJoinEvent extends PlayerEvent {
         this.joinMessage = joinMessage;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public String getJoinMessage() {
         return this.joinMessage;
     }
@@ -23,10 +27,6 @@ public class PirateJoinEvent extends PlayerEvent {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }
